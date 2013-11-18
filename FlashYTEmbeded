@@ -1,0 +1,6 @@
+<object style="height:355px;width:425px">
+<param name="movie" value="http://www.youtube.com/v/<?php echo $url; ?>?version=3&amp;iv_load_policy=3&amp;autoplay=1&amp;controls=0&amp;fs=1&amp;loop=1&amp;feature=player_embedded">
+<param name="allowFullScreen" value="true">
+<param name="allowScriptAccess" value="always">
+<embed src="http://www.youtube.com/v/<?php echo $url; ?>?version=3&amp;iv_load_policy=3&amp;autoplay=1&amp;controls=0&amp;fs=1&amp;loop=1&amp;feature=player_embedded" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="425" height="355">
+</object>
