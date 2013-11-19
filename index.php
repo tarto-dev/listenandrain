@@ -5,6 +5,9 @@
  */
 
 $vid = (isset($_GET['v'])) ? $_GET['v'] : NULL;
+
+$imageID = rand(1,2);
+$background = 'backgrounds/' . $imageID . '.gif';
 ?>
 
 <!doctype html>
@@ -21,7 +24,7 @@ $vid = (isset($_GET['v'])) ? $_GET['v'] : NULL;
         html { background: black; }
         h1 { font: bold 50px/1 Sans-Serif; letter-spacing: -2px; margin: 0 0 20px 0; text-align: center;}
         h3 {margin: 0 0 20px 0; text-align: center;}
-        body {height:100%; width: 100%; background: white; background-image: url('http://24.media.tumblr.com/49f7caffa896829a55a261b6d0858246/tumblr_mnh375KPGH1rk1qp5o1_500.gif'); background-size: cover; background-position: 50% 50%;}
+        body {height:100%; width: 100%; background: white; background-image: url('<?php echo $background; ?>'); background-size: cover; background-position: 50% 50%;}
         .form {margin: 50px auto; width: 50%}
 	.container {width: 50%; padding:20px; margin: 0 auto; background: rgba(255, 255, 255, 0.75);}
         form > * {width: 100%; text-align: center;}
