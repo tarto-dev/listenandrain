@@ -54,7 +54,7 @@ $background = 'backgrounds/' . $imageID . '.gif';
             <iframe id="iframe" src="http://www.youtube.com/embed/<?php echo $vid; ?>?rel=0&amp;hd=1&amp;autoplay=1&amp;controls=0&amp;iv_load_policy=3" frameborder="0" allowfullscreen="" style="width: 100%; height: 511px;"></iframe>
             <h3><?php echo $video->title; ?></h3>
             <div class="controllers">
-                Repeater : <input type="checkbox" class="repeater" /> <span class="repeater-counter">1</span> listens<br />
+                Repeater : <input type="checkbox" checked="checked" class="repeater" /> <span class="repeater-counter">1</span> listens<br />
                 Mood : <span class="pause">Pause</span><span class="play" style="display: none;">Play</span> ( Set volume to :
                             <span class="quarter">1/3</span>
                             <span class="half" style="display: none">2/3</span>
