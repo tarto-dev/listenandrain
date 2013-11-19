@@ -21,8 +21,9 @@ $vid = (isset($_GET['v'])) ? $_GET['v'] : NULL;
         html { background: black; }
         h1 { font: bold 50px/1 Sans-Serif; letter-spacing: -2px; margin: 0 0 20px 0; text-align: center;}
         h3 {margin: 0 0 20px 0; text-align: center;}
-        body { width: 50%; margin: 50px auto; padding: 20px; background: white; }
-        .form {margin: 0 auto; width: 500px;}
+        body {height:100%; width: 100%; background: white; background-image: url('http://24.media.tumblr.com/49f7caffa896829a55a261b6d0858246/tumblr_mnh375KPGH1rk1qp5o1_500.gif'); background-size: cover; background-position: 50% 50%;}
+        .form {margin: 50px auto; width: 50%}
+	.container {width: 50%; padding:20px; margin: 0 auto; background: rgba(255, 255, 255, 0.75);}
         form > * {width: 100%; text-align: center;}
         iframe { width: 100%; margin: 0 0 20px 0; }
 
@@ -33,6 +34,7 @@ $vid = (isset($_GET['v'])) ? $_GET['v'] : NULL;
 
 </head>
     <body>
+	<div class="container">
     <a href="https://github.com/benftwc/listenandrain"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
     <h1>Listen and Rain<br>
         <small>Youtube Enhancer</small></h1>
@@ -46,17 +48,11 @@ $vid = (isset($_GET['v'])) ? $_GET['v'] : NULL;
 
         ?>
 
-            <iframe id="iframe" src="http://www.youtube.com/embed/<?php echo $vid; ?>?rel=0&amp;hd=1&amp;autoplay=1&amp;controls=0" frameborder="0" allowfullscreen="" style="width: 855px; height: 511px;"></iframe>
-            <h3>Video informations <br />
-
-                <small>
-                    <?php echo $video->title; ?> <br />
-                </small>
-
-            </h3>
+            <iframe id="iframe" src="http://www.youtube.com/embed/<?php echo $vid; ?>?rel=0&amp;hd=1&amp;autoplay=1&amp;controls=0&amp;iv_load_policy=3" frameborder="0" allowfullscreen="" style="width: 100%; height: 511px;"></iframe>
+            <h3><?php echo $video->title; ?></h3>
             <div class="controllers">
                 Repeater : <input type="checkbox" class="repeater" /> <span class="repeater-counter">1</span> listens<br />
-                Mood : <span class="pause">Pause</span><span class="play" style="display: none;">Play</span> ( Volume :
+                Mood : <span class="pause">Pause</span><span class="play" style="display: none;">Play</span> ( Set volume to :
                             <span class="quarter">1/3</span>
                             <span class="half" style="display: none">2/3</span>
                             <span class="full" style="display: none">3/3</span>
@@ -64,7 +60,6 @@ $vid = (isset($_GET['v'])) ? $_GET['v'] : NULL;
             </div>
 
 
-        <script src="fit-yt.js"></script>
         <script>
 
             $("#iframe").ready(function () {
@@ -137,5 +132,12 @@ $vid = (isset($_GET['v'])) ? $_GET['v'] : NULL;
             </div>
 
     <?php endif; ?>
+    <div class="form">
+        <a href="https://twitter.com/share" class="twitter-share-button" data-via="Benftwc" data-size="large" data-hashtags="ListenAndRain">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<a href="https://twitter.com/Benftwc" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @Benftwc</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+</div>
     </body>
 </html>
