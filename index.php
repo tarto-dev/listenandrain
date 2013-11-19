@@ -6,7 +6,7 @@
 
 $vid = (isset($_GET['v'])) ? $_GET['v'] : NULL;
 
-$imageID = rand(1,2);
+$imageID = rand(1,3);
 $background = 'backgrounds/' . $imageID . '.gif';
 ?>
 
