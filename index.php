@@ -6,6 +6,20 @@
 
 $vid = (isset($_GET['v'])) ? $_GET['v'] : NULL;
 
+$video = FALSE;
+if(isset($vid)){
+		require_once("youtube-parser.php");
+        $feedURL = 'http://gdata.youtube.com/feeds/api/videos/' . $vid;
+        $entry = simplexml_load_file($feedURL);
+        $video = parseVideoEntry($entry);
+}
+
+if($video) {
+	$title = $video->title . ' - Listen and Rain';
+} else {
+	$title = "Listen And Rain - Youtube Enhancer";
+}
+
 $imageID = rand(1,3);
 $background = 'backgrounds/' . $imageID . '.gif';
 ?>
@@ -16,7 +30,7 @@ $background = 'backgrounds/' . $imageID . '.gif';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
 
-    <title>Listen and Rain - Youtube Enhancer</title>
+    <title><?php echo $title; ?></title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
 
     <style type="text/css">
@@ -42,14 +56,7 @@ $background = 'backgrounds/' . $imageID . '.gif';
     <h1>Listen and Rain<br>
         <small>Youtube Enhancer</small></h1>
 
-        <?php if(isset($vid) && !is_null($vid)):
-
-        require_once("youtube-parser.php");
-        $feedURL = 'http://gdata.youtube.com/feeds/api/videos/' . $vid;
-        $entry = simplexml_load_file($feedURL);
-        $video = parseVideoEntry($entry);
-
-        ?>
+        <?php if(isset($vid) && !is_null($vid)): ?>
 
             <iframe id="iframe" src="http://www.youtube.com/embed/<?php echo $vid; ?>?rel=0&amp;hd=1&amp;autoplay=1&amp;controls=0&amp;iv_load_policy=3" frameborder="0" allowfullscreen="" style="width: 100%; height: 511px;"></iframe>
             <h3><?php echo $video->title; ?></h3>
@@ -142,5 +149,6 @@ $background = 'backgrounds/' . $imageID . '.gif';
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 </div>
+<?php require_once('ga-tracking.php'); ?>
     </body>
 </html>
