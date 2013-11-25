@@ -3,8 +3,66 @@
  * User: Benftwc
  * Date: 18/11/13 21:00
  */
+function getServer() {
+	try{
+    $server = new PDO('mysql:host=localhost;dbname=listenandrain', '*****', '*****');
+    }
+	 
+	catch(Exception $e)
+	{
+        echo 'Erreur : '.$e->getMessage().'<br />';
+        echo 'N° : '.$e->getCode();
+	}
+	return $server;
+}
+
+function insertData($name, $yid){
+	$server = getServer();
+	$query = $server->prepare("INSERT INTO  `datas` (name ,yid, count) VALUES ( :name,  :yid, 1);");
+	$query->bindParam(':name',  $name);
+	$query->bindParam(':yid',  $yid);
+	return $query->execute();
+}	
+
+function updateCount($yid) {
+	$server = getServer();
+	$result = $server->exec("UPDATE `datas` SET count=count+1 WHERE yid='" . $yid . "'");
+	//var_dump($result);
+}
+
+function addDatas($name, $yid){
+	$server = getServer();
+	$query = $server->query("SELECT * FROM `datas` WHERE yid = '" . $yid . "' LIMIT 0,1");
+	$result = $query->fetchAll(PDO::FETCH_ASSOC);
+
+	if(count($result) != 0) {
+		updateCount($yid);
+	} else {
+		insertData($name, $yid);
+	}
+
+}
+
+
 
 $vid = (isset($_GET['v'])) ? $_GET['v'] : NULL;
+$rain = (isset($_GET['r'])) ? $_GET['r'] : "1";
+
+
+$video = FALSE;
+if(isset($vid)){
+		require_once("youtube-parser.php");
+        $feedURL = 'http://gdata.youtube.com/feeds/api/videos/' . $vid;
+        $entry = simplexml_load_file($feedURL);
+        $video = parseVideoEntry($entry);
+        addDatas($video->title, $vid);
+}
+
+if($video) {
+	$title = $video->title . ' - Listen and Rain';
+} else {
+	$title = "Listen And Rain - Youtube Enhancer";
+}
 
 $imageID = rand(1,3);
 $background = 'backgrounds/' . $imageID . '.gif';
@@ -16,7 +74,7 @@ $background = 'backgrounds/' . $imageID . '.gif';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
 
-    <title>Listen and Rain - Youtube Enhancer</title>
+    <title><?php echo $title; ?></title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
 
     <style type="text/css">
@@ -35,32 +93,40 @@ $background = 'backgrounds/' . $imageID . '.gif';
         }
     </style>
 
-</head>
+	</head>
     <body>
 	<div class="container">
     <a href="https://github.com/benftwc/listenandrain"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
     <h1>Listen and Rain<br>
         <small>Youtube Enhancer</small></h1>
 
-        <?php if(isset($vid) && !is_null($vid)):
+        <?php if(isset($vid) && !is_null($vid)): ?>
 
-        require_once("youtube-parser.php");
-        $feedURL = 'http://gdata.youtube.com/feeds/api/videos/' . $vid;
-        $entry = simplexml_load_file($feedURL);
-        $video = parseVideoEntry($entry);
-
-        ?>
-
-            <iframe id="iframe" src="http://www.youtube.com/embed/<?php echo $vid; ?>?rel=0&amp;hd=1&amp;autoplay=1&amp;controls=0&amp;iv_load_policy=3" frameborder="0" allowfullscreen="" style="width: 100%; height: 511px;"></iframe>
+            <iframe id="iframe" src="http://www.youtube.com/embed/<?php echo $vid; ?>?rel=0&amp;hd=1&amp;autoplay=1&amp;iv_load_policy=3" frameborder="0" allowfullscreen="" style="width: 100%; height: 511px;"></iframe>
             <h3><?php echo $video->title; ?></h3>
             <div class="controllers">
                 Repeater : <input type="checkbox" checked="checked" class="repeater" /> <span class="repeater-counter">1</span> listens<br />
-                Mood : <span class="pause">Pause</span><span class="play" style="display: none;">Play</span> ( Set volume to :
+                Mood : 
+                <?php if(!$rain) : ?>
+                	<span class="play">Play</span>
+                	<span class="pause" style="display: none;">Pause</span>
+                <?php else: ?>
+            		<span class="pause">Pause</span>
+                	<span class="play" style="display: none;">Play</span>
+                <?php endif; ?>
+                	 ( Set volume to :
                             <span class="quarter">1/3</span>
                             <span class="half" style="display: none">2/3</span>
                             <span class="full" style="display: none">3/3</span>
                 )
             </div>
+
+
+<audio id="audio"<?php if($rain) : ?> autoplay<?php endif; ?> loop>
+	<source src="audio/rain.ogg" type="audio/ogg">
+	<source src="audio/rain.m4a" type="audio/mp4">
+	<source src="audio/rain.mp3" type="audio/mpeg">
+</audio>
 
 
         <script>
@@ -77,10 +143,10 @@ $background = 'backgrounds/' . $imageID . '.gif';
             });
 
             $(document).ready(function() {
-                var audioElement = document.createElement('audio');
-                audioElement.setAttribute('src', 'audio.mp3');
-                audioElement.setAttribute('autoplay', 'autoplay');
-                audioElement.setAttribute('loop', 'true');
+                var audioElement = document.getElementById('audio');
+               
+                //audioElement.setAttribute('autoplay', 'autoplay');
+                //audioElement.setAttribute('loop', 'true');
                 //audioElement.load()
 
                 $.get();
@@ -142,5 +208,7 @@ $background = 'backgrounds/' . $imageID . '.gif';
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 </div>
+
+<?php require_once('ga-tracking.php'); ?>
     </body>
 </html>
